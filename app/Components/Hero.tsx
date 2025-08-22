@@ -1,0 +1,162 @@
+"use client";
+
+import Image from "next/image";
+import FeaturedSlider from "./FeaturedSlider";
+
+
+
+
+export default function Hero() {
+  return (
+    <section>
+      {/* Hero Banner */}
+      <div className="relative w-full h-[110vh]">
+        <Image
+          src="/hero/hero1.webp"
+          alt="FW 25 Collection"
+          fill
+          className="object-cover"
+          priority
+        />
+        <div className="absolute bottom-12 left-1/2 transform -translate-x-1/2 text-center px-4">
+          <p className="text-white text-sm mb-2 tracking-wide">
+            NEW FW ’25 COLLECTION | FIRST ARRIVALS ONLINE NOW
+
+          </p>
+          <h1 className="text-white text-5xl md:text-7xl font-bold mb-6">
+            Everyday Ambition.
+          </h1>
+          <button className="bg-white text-black px-6 py-3 text-sm font-normal">
+            SHOP MEN
+          </button>
+        </div>
+      </div>
+
+      {/* Two-Image Section with reduced spacing */}
+      <div className="px-2 md:px-6 grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+        {/* Tees */}
+        <div className="relative h-[110vh]">
+  <Image
+    src="/hero/hero2.webp"
+    alt="Tees"
+    fill
+    className="object-cover"
+  />
+  <div className="absolute bottom-6 left-6 text-left text-white">
+    <p className="text-sm">SHOP NOW</p>
+    <h2 className="text-2xl font-bold">TEES</h2>
+  </div>
+</div>
+
+
+        {/* Long Sleeves */}
+        <div className="relative h-[110vh]">
+          <Image
+            src="/hero/hero3.webp"
+            alt="Long Sleeves"
+            fill
+            className="object-cover"
+          />
+          <div className="absolute bottom-6 left-6 text-white">
+            <p className="text-sm">SHOP NOW</p>
+            <h2 className="text-2xl font-bold">LONGSLEEVES</h2>
+          </div>
+        </div>
+
+
+        
+      </div>
+
+       <div className="relative w-full h-[110vh] mt-10">
+        <Image
+          src="/hero/hero5.webp"
+          alt="FW 25 Collection"
+          fill
+          className="object-cover"
+          priority
+        />
+        <div className="absolute bottom-12 left-1/2 transform -translate-x-1/2 text-center px-4">
+          <p className="text-white text-sm mb-2 tracking-wide">
+            NEW FW ’25 COLLECTION | FIRST ARRIVALS ONLINE NOW
+          </p>
+          <h1 className="text-white text-5xl md:text-7xl font-bold mb-6">
+            Everyday Ambition.
+          </h1>
+          <button className="bg-white text-black px-6 py-3 text-sm font-normal">
+            SHOP WOMEN
+          </button>
+        </div>
+      </div>
+
+<div className="relative w-full h-[90vh]">
+  <Image
+    src="/hero/hero6.webp"
+    alt="FW 25 Collection"
+    fill
+    className="object-cover"
+    priority
+  />
+  <div className="absolute bottom-12 left-1/2 transform -translate-x-1/2 text-center px-4">
+    <p className="text-white text-sm mb-2 tracking-wide">
+      SUMMER ’25 COLLECTION AVAILABLE ONLINE
+    </p>
+    <h1 className="text-white text-5xl md:text-7xl font-bold mb-6 whitespace-nowrap">
+      SCENT OF SUMMER
+    </h1>
+    <div className="flex justify-center gap-4">
+      <button className="bg-white text-black px-6 py-3 text-sm font-normal">
+        SHOP MEN
+      </button>
+      <button className="bg-white text-black px-6 py-3 text-sm font-normal">
+        SHOP WOMEN
+      </button>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+ {/* Two-Image Section with reduced spacing */}
+      <div className="px-2 md:px-6 grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+        {/* Tees */}
+        <div className="relative h-[110vh]">
+  <Image
+    src="/hero/hero9.webp"
+    alt="Tees"
+    fill
+    className="object-cover"
+  />
+  <div className="absolute bottom-6 left-6 text-left text-white">
+    <p className="text-sm">SHOP NOW</p>
+    <h2 className="text-2xl font-bold">SHIRTS</h2>
+  </div>
+</div>
+
+
+        {/* Long Sleeves */}
+        <div className="relative h-[110vh]">
+          <Image
+            src="/hero/hero8.webp"
+            alt="Long Sleeves"
+            fill
+            className="object-cover"
+          />
+          <div className="absolute bottom-6 left-6 text-white">
+            <p className="text-sm">SHOP NOW</p>
+            <h2 className="text-2xl font-bold">SHORTS</h2>
+          </div>
+        </div>
+
+
+        
+      </div>
+
+
+ {/* Slider Section */}
+      <FeaturedSlider />
+
+    </section>
+  );
+}
