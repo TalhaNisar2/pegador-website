@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useState, useRef, useEffect } from "react";
+import Link from "next/link";
 
 const links = ["Men", "Women", "Essentials", "LookBooks"];
 
@@ -109,6 +110,8 @@ const lookbooksData = {
 };
 
 export default function Navbar() {
+  const [isCartOpen, setIsCartOpen] = useState(false);
+
   const [activeLink, setActiveLink] = useState("Men");
   const [hoverLink, setHoverLink] = useState<string | null>(null);
   const [isHoveringCard, setIsHoveringCard] = useState(false);
@@ -210,8 +213,9 @@ export default function Navbar() {
     </svg>
   </div>
 
-  {/* Star Icon */}
-  <div className="p-1 rounded-full cursor-pointer">
+{/* Star Icon */}
+<Link href="/wishlist">
+  <div className="p-1 rounded-full cursor-pointer hover:bg-gray-100 transition">
     <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none">
       <path
         fillRule="evenodd"
@@ -224,18 +228,51 @@ export default function Navbar() {
       ></path>
     </svg>
   </div>
+</Link>
 
-  {/* Shopping Cart Icon */}
-  <div className="p-1 rounded-full cursor-pointer">
-    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none">
-      <g fill="none" fillRule="evenodd">
-        <path d="M0 0h24v24H0z"></path>
-        <path d="M15.321 9.5V5.321a3.321 3.321 0 0 0-6.642 0V9.5" stroke="currentColor" strokeWidth="1.5"></path>
-        <path stroke="currentColor" strokeWidth="1.5" d="M5.357 7.705h13.286l1.107 13.563H4.25z"></path>
-      </g>
-    </svg>
+  <div className="p-1 rounded-full cursor-pointer" onClick={() => setIsCartOpen(true)}>
+          <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none">
+            <g fill="none" fillRule="evenodd">
+              <path d="M0 0h24v24H0z"></path>
+              <path d="M15.321 9.5V5.321a3.321 3.321 0 0 0-6.642 0V9.5" stroke="currentColor" strokeWidth="1.5"></path>
+              <path stroke="currentColor" strokeWidth="1.5" d="M5.357 7.705h13.286l1.107 13.563H4.25z"></path>
+            </g>
+          </svg>
+        </div>
+</div>
+
+
+{/* Cart Drawer */}
+<div
+  className={`fixed top-0 right-0 h-full w-96 bg-white shadow-lg z-50 transform transition-transform duration-300 ${
+    isCartOpen ? "translate-x-0" : "translate-x-full"
+  }`}
+>
+  {/* Cross Button */}
+  <button
+    className="absolute top-4 right-4 text-gray-600 hover:text-gray-900 text-2xl cursor-pointer"
+    onClick={() => setIsCartOpen(false)}
+  >
+    &times;
+  </button>
+
+  {/* Empty Cart Content */}
+  <div className="flex flex-col justify-center items-center h-full p-6 text-center">
+    <p className="text-gray-600 mb-4">Your shopping cart is empty</p>
+    <button className="bg-black text-white px-6 py-2 uppercase font-semibold hover:bg-gray-900 transition cursor-pointer">
+      Shop Now
+    </button>
   </div>
 </div>
+
+
+      {/* Optional Overlay */}
+      {isCartOpen && (
+        <div
+          className="fixed inset-0 bg-black/30 z-40"
+          onClick={() => setIsCartOpen(false)}
+        />
+      )}
 
 
 

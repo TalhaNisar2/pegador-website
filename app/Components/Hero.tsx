@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import FeaturedSlider from "./FeaturedSlider";
 
 export default function Hero() {
@@ -22,9 +23,12 @@ export default function Hero() {
           <h1 className="text-white text-5xl md:text-7xl font-bold mb-6 whitespace-nowrap">
             Everyday Ambition.
           </h1>
-          <button className="bg-white text-black px-6 py-3 text-sm font-normal cursor-pointer hover:bg-black hover:text-white transition">
+           <Link
+            href="/products"
+            className="bg-white text-black px-6 py-3 text-sm font-normal cursor-pointer hover:bg-black hover:text-white transition"
+          >
             SHOP MEN
-          </button>
+          </Link>
         </div>
       </div>
 
@@ -73,9 +77,12 @@ export default function Hero() {
           <h1 className="text-white text-5xl md:text-7xl font-bold mb-6 whitespace-nowrap">
             Everyday Ambition.
           </h1>
-          <button className="bg-white text-black px-6 py-3 text-sm font-normal cursor-pointer hover:bg-black hover:text-white transition">
+          <Link
+            href="/products"
+            className="bg-white text-black px-6 py-3 text-sm font-normal cursor-pointer hover:bg-black hover:text-white transition"
+          >
             SHOP WOMEN
-          </button>
+          </Link>
         </div>
       </div>
 
@@ -96,12 +103,18 @@ export default function Hero() {
             SCENT OF SUMMER
           </h1>
           <div className="flex justify-center gap-4">
-            <button className="bg-white text-black px-6 py-3 text-sm font-normal cursor-pointer hover:bg-black hover:text-white transition">
+            <Link
+              href="/products"
+              className="bg-white text-black px-6 py-3 text-sm font-normal cursor-pointer hover:bg-black hover:text-white transition"
+            >
               SHOP MEN
-            </button>
-            <button className="bg-white text-black px-6 py-3 text-sm font-normal cursor-pointer hover:bg-black hover:text-white transition">
+            </Link>
+            <Link
+              href="/products"
+              className="bg-white text-black px-6 py-3 text-sm font-normal cursor-pointer hover:bg-black hover:text-white transition"
+            >
               SHOP WOMEN
-            </button>
+            </Link>
           </div>
         </div>
       </div>
