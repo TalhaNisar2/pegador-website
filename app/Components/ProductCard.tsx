@@ -4,6 +4,7 @@ import { useState } from "react";
 import Image, { StaticImageData } from "next/image";
 import { Heart, ShoppingBag, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/app/Components/ui/button";
+import Link from "next/link"
 
 interface ProductCardProps {
   id: string;
@@ -33,12 +34,14 @@ export const ProductCard = ({
   const [showSizes, setShowSizes] = useState(false);
 
   const nextImage = (e: React.MouseEvent) => {
+    e.preventDefault();
     e.stopPropagation();
     setCurrentImageIndex((prev) => (prev + 1) % images.length);
   };
 
   const prevImage = (e: React.MouseEvent) => {
     e.stopPropagation();
+    e.preventDefault();
     setCurrentImageIndex((prev) => (prev - 1 + images.length) % images.length);
   };
 
@@ -56,6 +59,7 @@ export const ProductCard = ({
     : currentImageIndex;
 
   return (
+    <Link href={`/products/${encodeURIComponent(name.replace(/\s+/g, "-"))}`}>
    <div
   className="group relative rounded-lg overflow-hidden transition-all duration-300 cursor-pointer"
   onMouseEnter={() => setIsHovered(true)}
@@ -107,7 +111,11 @@ export const ProductCard = ({
       variant="ghost"
       size="icon"
       className="absolute top-3 right-3 w-8 h-8 bg-transparent hover:bg-gray-200/40 transition-all duration-200"
-      onClick={() => onWishlistToggle?.(id)}
+      onClick={(e) =>{
+e.preventDefault();
+e.stopPropagation();
+        onWishlistToggle?.(id)}
+      } 
     >
       <Heart
         className={`w-4 h-4 transition-colors ${
@@ -138,7 +146,11 @@ export const ProductCard = ({
       variant="ghost"
       size="icon"
       className="absolute bottom-3 right-3 w-8 h-8 bg-transparent hover:bg-gray-200/40 transition-all duration-200 opacity-0 group-hover:opacity-100"
-      onClick={() => setShowSizes(!showSizes)}
+      onClick={(e) =>{
+        e.preventDefault();
+        e.stopPropagation();
+         setShowSizes(!showSizes);
+        }}
     >
       <ShoppingBag className="w-4 h-4 text-gray-700" />
     </Button>
@@ -152,6 +164,6 @@ export const ProductCard = ({
     <p className="text-sm font-semibold text-gray-700">{price}</p>
   </div>
 </div>
-
+</Link>
   );
 };
