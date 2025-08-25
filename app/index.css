@@ -1,0 +1,167 @@
+/* Tailwind directives */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Root Variables */
+:root {
+  /* Base colors */
+  --background: hsl(0, 0%, 100%);
+  --foreground: hsl(0, 0%, 3.9%);
+
+  --card: hsl(0, 0%, 100%);
+  --card-foreground: hsl(0, 0%, 3.9%);
+
+  --popover: hsl(0, 0%, 100%);
+  --popover-foreground: hsl(0, 0%, 3.9%);
+
+  --primary: hsl(0, 0%, 9%);
+  --primary-foreground: hsl(0, 0%, 98%);
+
+  --secondary: hsl(0, 0%, 96.1%);
+  --secondary-foreground: hsl(0, 0%, 9%);
+
+  --muted: hsl(0, 0%, 96.1%);
+  --muted-foreground: hsl(0, 0%, 45.1%);
+
+  --accent: hsl(0, 0%, 96.1%);
+  --accent-foreground: hsl(0, 0%, 9%);
+
+  --destructive: hsl(0, 84.2%, 60.2%);
+  --destructive-foreground: hsl(0, 0%, 98%);
+
+  --border: hsl(0, 0%, 89.8%);
+  --input: hsl(0, 0%, 89.8%);
+  --ring: hsl(0, 0%, 3.9%);
+
+  --radius: 0.75rem;
+
+  /* Dashboard specific */
+  --dashboard-bg: hsl(0, 0%, 98%);
+  --dashboard-sidebar: hsl(0, 0%, 9%);
+  --dashboard-sidebar-foreground: hsl(0, 0%, 98%);
+  --dashboard-hover: hsl(0, 0%, 96.1%);
+  --dashboard-accent: hsl(46, 100%, 50%);
+  --dashboard-accent-foreground: hsl(0, 0%, 9%);
+
+  /* Gradients */
+  --gradient-primary: linear-gradient(135deg, hsl(0, 0%, 9%), hsl(0, 0%, 20%));
+  --gradient-accent: linear-gradient(135deg, hsl(46, 100%, 50%), hsl(45, 100%, 55%));
+  --gradient-card: linear-gradient(145deg, hsl(0, 0%, 100%), hsl(0, 0%, 98%));
+
+  /* Shadows */
+  --shadow-card: 0 1px 3px 0 hsl(0, 0%, 0% / 0.1), 0 1px 2px -1px hsl(0, 0%, 0% / 0.1);
+  --shadow-elevated: 0 10px 15px -3px hsl(0, 0%, 0% / 0.1), 0 4px 6px -4px hsl(0, 0%, 0% / 0.1);
+  --shadow-glow: 0 0 20px hsl(46, 100%, 50% / 0.3);
+
+  /* Animations */
+  --transition-base: 0.2s ease-in-out;
+  --transition-smooth: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Dark Mode */
+.dark {
+  --background: hsl(0, 0%, 3.9%);
+  --foreground: hsl(0, 0%, 98%);
+
+  --card: hsl(0, 0%, 3.9%);
+  --card-foreground: hsl(0, 0%, 98%);
+
+  --popover: hsl(0, 0%, 3.9%);
+  --popover-foreground: hsl(0, 0%, 98%);
+
+  --primary: hsl(0, 0%, 98%);
+  --primary-foreground: hsl(0, 0%, 9%);
+
+  --secondary: hsl(0, 0%, 14.9%);
+  --secondary-foreground: hsl(0, 0%, 98%);
+
+  --muted: hsl(0, 0%, 14.9%);
+  --muted-foreground: hsl(0, 0%, 63.9%);
+
+  --accent: hsl(0, 0%, 14.9%);
+  --accent-foreground: hsl(0, 0%, 98%);
+
+  --destructive: hsl(0, 62.8%, 30.6%);
+  --destructive-foreground: hsl(0, 0%, 98%);
+
+  --border: hsl(0, 0%, 14.9%);
+  --input: hsl(0, 0%, 14.9%);
+  --ring: hsl(0, 0%, 83.1%);
+
+  --gradient-primary: linear-gradient(135deg, hsl(0, 0%, 3.9%), hsl(0, 0%, 14.9%));
+  --gradient-card: linear-gradient(145deg, hsl(0, 0%, 3.9%), hsl(0, 0%, 7%));
+}
+
+/* Base Styles */
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+  @apply antialiased;
+}
+
+/* Hide horizontal scrollbar */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Dashboard Classes */
+.dashboard-gradient {
+  background: var(--gradient-primary);
+}
+
+.dashboard-card {
+  background: var(--gradient-card);
+  box-shadow: var(--shadow-card);
+}
+
+.dashboard-glow {
+  box-shadow: var(--shadow-glow);
+}
+
+/* Dashboard Buttons */
+.btn-dashboard {
+  @apply inline-flex items-center justify-center rounded-lg px-4 py-2 text-sm font-medium transition-all;
+}
+
+.btn-dashboard-primary {
+  @apply btn-dashboard bg-primary text-primary-foreground hover:bg-primary/90;
+}
+
+.btn-dashboard-accent {
+  background: var(--gradient-accent);
+  color: hsl(var(--dashboard-accent-foreground));
+  @apply btn-dashboard hover:opacity-90;
+}
+
+/* Form Inputs */
+.form-input {
+  @apply flex h-10 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; } 
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); } 
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.95); } 
+  to { opacity: 1; transform: scale(1); }
+}
+
+.fade-in { animation: fadeIn var(--transition-smooth) ease-out; }
+.slide-up { animation: slideUp var(--transition-smooth) ease-out; }
+.scale-in { animation: scaleIn var(--transition-base) ease-out; }
+.hover-lift { transition: transform var(--transition-base), box-shadow var(--transition-base); }
+.hover-lift:hover { transform: translateY(-2px); box-shadow: var(--shadow-elevated); }
