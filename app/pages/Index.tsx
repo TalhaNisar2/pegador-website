@@ -1,3 +1,4 @@
+"use client";
 import { useState, useMemo } from "react";
 import { ProductCard } from "@/app/Components/ProductCard";
 import { FilterSidebar } from "@/app/Components/FilterSidebar";

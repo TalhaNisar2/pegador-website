@@ -3,13 +3,16 @@
 import { ProductCard } from "@/app/Components/ProductCard";
 import { products } from "@/app/data/products";
 import { useToast } from "@/app/hooks/use-toast";
+import { addToCart, CartItem } from "@/app/store/cart/cartSlice";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 
 const sizes = ["XS", "S", "M", "L", "XL"] as const;
 
 export default function ProductPage({ params }: { params: Promise<{ productName: string }> }) {
+  const dispatch=useDispatch();
   const { productName } = React.use(params);
   const product = products.find((p) => p.name === productName.replaceAll("-", " "));
     const [wishlistedItems, setWishlistedItems] = useState<Set<string>>(new Set());
@@ -17,7 +20,27 @@ export default function ProductPage({ params }: { params: Promise<{ productName:
   const [size, setSize] = useState<string | null>("M");
   const price = 16905.56;
     const { toast } = useToast();
-  
+  const handleAddToCart = (productId: string, size: string) => {
+  const product = products.find((p) => p.id === productId);
+  if (!product) return;
+
+  const cartItem: CartItem = {
+    id: product.id,
+    name: product.name,
+    price: Number(product.price),   // make sure `products` has price
+    size,
+    quantity: 1,            // default to 1
+    images: product.images,   // or `product.images[0]` if multiple
+  };
+
+  dispatch(addToCart(cartItem));
+
+  toast({
+    title: "Added to cart",
+    description: `${product.name} (Size: ${size}) added to your cart.`,
+  });
+};
+
   const handleWishlistToggle = (productId: string) => {
     setWishlistedItems((prev) => {
       const newSet = new Set(prev);
@@ -29,14 +52,6 @@ export default function ProductPage({ params }: { params: Promise<{ productName:
         toast({ title: "Added to wishlist", description: "Item added to your wishlist." });
       }
       return newSet;
-    });
-  };
-
-  const handleAddToCart = (productId: string, size: string) => {
-    const product = products.find((p) => p.id === productId);
-    toast({
-      title: "Added to cart",
-      description: `${product?.name} (Size: ${size}) added to your cart.`,
     });
   };
   return (
@@ -96,7 +111,7 @@ export default function ProductPage({ params }: { params: Promise<{ productName:
 
           {/* Actions */}
           <div className="mt-5 flex gap-2">
-            <button className="flex-1 rounded bg-black px-4 py-2 text-sm font-medium text-white hover:bg-black/90">
+            <button onClick={()=>product && size && handleAddToCart(product.id, size)} className="flex-1 rounded bg-black px-4 py-2 text-sm font-medium text-white hover:bg-black/90">
               Add to cart
             </button>
             <button
@@ -186,28 +201,6 @@ export default function ProductPage({ params }: { params: Promise<{ productName:
           </div>
         </div>
       </section>
-
-      {/* Minimal footer */}
-      <footer className="mt-16 border-t py-10 text-xs text-gray-500">
-        <div className="grid grid-cols-2 gap-6 sm:grid-cols-4">
-          <div>
-            <div className="font-semibold text-gray-900">Customer Service</div>
-            <ul className="mt-2 space-y-1">
-              <li>Shipping & returns</li>
-              <li>Contact us</li>
-              <li>Payment methods</li>
-            </ul>
-          </div>
-          <div>
-            <div className="font-semibold text-gray-900">About</div>
-            <ul className="mt-2 space-y-1">
-              <li>Careers</li>
-              <li>Imprint</li>
-              <li>Privacy</li>
-            </ul>
-          </div>
-        </div>
-      </footer>
     </main>
   );
 }

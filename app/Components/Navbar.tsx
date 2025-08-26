@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
+import { ShoppingCartSidebar } from "./Sidebar";
 
 const links = ["Men", "Women", "Essentials", "LookBooks"];
 
@@ -243,27 +244,7 @@ export default function Navbar() {
 
 
 {/* Cart Drawer */}
-<div
-  className={`fixed top-0 right-0 h-full w-96 bg-white shadow-lg z-50 transform transition-transform duration-300 ${
-    isCartOpen ? "translate-x-0" : "translate-x-full"
-  }`}
->
-  {/* Cross Button */}
-  <button
-    className="absolute top-4 right-4 text-gray-600 hover:text-gray-900 text-2xl cursor-pointer"
-    onClick={() => setIsCartOpen(false)}
-  >
-    &times;
-  </button>
-
-  {/* Empty Cart Content */}
-  <div className="flex flex-col justify-center items-center h-full p-6 text-center">
-    <p className="text-gray-600 mb-4">Your shopping cart is empty</p>
-    <button className="bg-black text-white px-6 py-2 uppercase font-semibold hover:bg-gray-900 transition cursor-pointer">
-      Shop Now
-    </button>
-  </div>
-</div>
+<ShoppingCartSidebar isCartOpen={isCartOpen} onClose={() => setIsCartOpen(false)}/>
 
 
       {/* Optional Overlay */}

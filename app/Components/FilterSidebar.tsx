@@ -1,3 +1,4 @@
+"use client";
 import { Button } from "@/app/Components/ui/button";
 import { Checkbox } from "@/app/Components/ui/checkbox";
 import { Label } from "@/app/Components/ui/label";

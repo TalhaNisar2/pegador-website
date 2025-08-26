@@ -8,10 +8,13 @@ import { ProductPagination } from "@/app/Components/ProductPagination";
 import { Button } from "@/app/Components/ui/button";
 import { products, filterGroups, sortOptions } from "@/app/data/products";
 import { useToast } from "@/app/hooks/use-toast";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../store/cart/cartSlice";
 
 const PRODUCTS_PER_PAGE = 8;
 
 export default function ProductsPage() {
+  const dispatch=useDispatch();
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [selectedFilters, setSelectedFilters] = useState<Record<string, string[]>>({});
   const [selectedSort, setSelectedSort] = useState("featured");
@@ -107,6 +110,18 @@ export default function ProductsPage() {
 
   const handleAddToCart = (productId: string, size: string) => {
     const product = products.find((p) => p.id === productId);
+    if (!product) return;
+
+  dispatch(
+    addToCart({
+      id: product.id,
+      name: product.name,
+      price: parseFloat(product.price.replace("Rs.", "").trim()), // ensure number
+      images: product.images,
+      size,
+      quantity: 1,
+    })
+  );
     toast({
       title: "Added to cart",
       description: `${product?.name} (Size: ${size}) added to your cart.`,

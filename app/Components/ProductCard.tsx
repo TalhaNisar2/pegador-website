@@ -47,6 +47,7 @@ export const ProductCard = ({
 
   const handleSizeClick = (size: string, e: React.MouseEvent) => {
     e.stopPropagation();
+    e.preventDefault();
     onAddToCart?.(id, size);
     setShowSizes(false);
   };
