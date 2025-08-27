@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 4, "column": 0}, "map": {"version":3,"sources":["file:///Users/iosdev/Desktop/pegador/app/dashboard/layout.tsx"],"sourcesContent":["\n\nexport default function DashboardLayout({\n  children,\n}: {\n  children: React.ReactNode;\n}) {\n  return (\n    <html lang=\"en\">\n      <body className=\"antialiased\">\n        {/* Dashboard pages render full screen, no Navbar/Footer */}\n        {children}\n      </body>\n    </html>\n  );\n}\n"],"names":[],"mappings":";;;;;;AAEe,SAAS,gBAAgB,EACtC,QAAQ,EAGT;IACC,qBACE,8OAAC;QAAK,MAAK;kBACT,cAAA,8OAAC;YAAK,WAAU;sBAEb;;;;;;;;;;;AAIT","debugId":null}}]
+}

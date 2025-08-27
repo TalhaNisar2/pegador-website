@@ -88,91 +88,99 @@ export function ShoppingCartSidebar({
           </Button>
         </div>
 
-        {/* Cart Items */}
-        <div className="flex-1 overflow-y-auto">
-          <div className="p-4 space-y-4">
-            {items.map((item) => (
-              <div
-                key={item.id}
-                className="flex gap-4 border-b border-gray-200 pb-4"
+   {/* Cart Items */}
+<div className="flex-1 overflow-y-auto">
+  <div className="p-4 space-y-4">
+    {items.map((item) => {
+      const isMinusDisabled = item.quantity <= 1;
+
+      return (
+        <div
+          key={item.id}
+          className="flex gap-4 border-b border-gray-200 pb-4"
+        >
+         <div className="w-20 h-20 bg-gray-100 rounded-md overflow-hidden flex-shrink-0">
+  <img
+    src={getImageSrc(item.images[0]) || "/placeholder.svg"}
+    alt={item.name}
+    className="w-full h-full object-contain"
+  />
+</div>
+
+          <div className="flex-1 min-w-0">
+            <h3 className="font-semibold text-gray-900 text-sm mb-1">
+              {item.name}
+            </h3>
+            <p className="text-sm text-gray-700 mb-2">Size: {item.size}</p>
+
+            {/* Quantity Controls */}
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="icon"
+                className={`h-8 w-8 ${
+                  isMinusDisabled
+                    ? "cursor-not-allowed text-gray-400 border-gray-200"
+                    : "text-black hover:text-black"
+                }`}
+                onClick={() =>
+                  !isMinusDisabled &&
+                  dispatch(
+                    updateQuantity({
+                      id: item.id,
+                      quantity: item.quantity - 1,
+                    })
+                  )
+                }
+                disabled={isMinusDisabled}
               >
-                <div className="w-20 h-20 bg-gray-100 rounded-md overflow-hidden flex-shrink-0">
-                  <img
-                    src={getImageSrc(item.images[0]) || "/placeholder.svg"}
-                    alt={item.name}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
+                <Minus className="h-3 w-3" />
+              </Button>
 
-                <div className="flex-1 min-w-0">
-                  <h3 className="font-semibold text-gray-900 text-sm mb-1">
-                    {item.name}
-                  </h3>
-                  <p className="text-sm text-gray-700 mb-2">
-                    Size: {item.size}
-                  </p>
+              <Input
+                type="number"
+                value={item.quantity}
+                onChange={(e) =>
+                  dispatch(
+                    updateQuantity({
+                      id: item.id,
+                      quantity: Number.parseInt(e.target.value) || 1,
+                    })
+                  )
+                }
+                className="w-16 h-8 text-center text-gray-900 font-semibold"
+                min="1"
+              />
 
-                  {/* Quantity Controls */}
-                  <div className="flex items-center gap-2">
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      className="h-8 w-8"
-                      onClick={() =>
-                        dispatch(
-                          updateQuantity({
-                            id: item.id,
-                            quantity: item.quantity - 1,
-                          })
-                        )
-                      }
-                    >
-                      <Minus className="h-3 w-3" />
-                    </Button>
+              <Button
+                variant="outline"
+                size="icon"
+                className="h-8 w-8 text-black hover:text-black"
+                onClick={() =>
+                  dispatch(
+                    updateQuantity({
+                      id: item.id,
+                      quantity: item.quantity + 1,
+                    })
+                  )
+                }
+              >
+                <Plus className="h-3 w-3" />
+              </Button>
+            </div>
+          </div>
 
-                    <Input
-                      type="number"
-                      value={item.quantity}
-                      onChange={(e) =>
-                        dispatch(
-                          updateQuantity({
-                            id: item.id,
-                            quantity: Number.parseInt(e.target.value) || 1,
-                          })
-                        )
-                      }
-                      className="w-16 h-8 text-center text-gray-900 font-semibold"
-                      min="1"
-                    />
-
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      className="h-8 w-8"
-                      onClick={() =>
-                        dispatch(
-                          updateQuantity({
-                            id: item.id,
-                            quantity: item.quantity + 1,
-                          })
-                        )
-                      }
-                    >
-                      <Plus className="h-3 w-3" />
-                    </Button>
+          <div className="text-right">
+            <p className="font-bold text-gray-900">
+              Rs.
+              {(item.price * item.quantity).toLocaleString("en-IN", {
+                minimumFractionDigits: 2,
+              })}
+            </p>
                   </div>
-                </div>
-
-                <div className="text-right">
-                  <p className="font-bold text-gray-900">
-                    Rs.
-                    {(item.price * item.quantity).toLocaleString("en-IN", {
-                      minimumFractionDigits: 2,
-                    })}
-                  </p>
-                </div>
-              </div>
-            ))}
+        </div>
+      );
+            })}
           </div>
 
           {/* Recommendations Section */}
@@ -216,6 +224,9 @@ export function ShoppingCartSidebar({
               ))}
             </div>
           </div>
+
+
+          
         </div>
 
         {/* Footer */}

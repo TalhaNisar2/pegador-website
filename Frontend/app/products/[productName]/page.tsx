@@ -55,7 +55,7 @@ export default function ProductPage({ params }: { params: Promise<{ productName:
     });
   };
   return (
-    <main className="mx-auto max-w-[1200px] px-4 md:px-6 lg:px-8 text-gray-900">
+    <main className="mx-auto w-full px-4 md:px-6 lg:px-8 text-gray-900">
       {/* Breadcrumbs */}
       <nav className="py-3 text-xs text-gray-500">
         <ol className="flex flex-wrap gap-1">
@@ -83,77 +83,187 @@ export default function ProductPage({ params }: { params: Promise<{ productName:
           </div>
         </div>
 
-        {/* Purchase panel */}
-        <aside className="lg:col-span-4">
-          <h1 className="text-lg font-semibold uppercase tracking-wide">{product?.name}</h1>
-          <div className="mt-1 text-sm text-gray-700">
-            Rs.{price.toLocaleString(undefined, { minimumFractionDigits: 2 })}
-          </div>
-          {/* Sizes */}
-          <div className="mt-5">
-            <div className="mb-2 text-xs font-medium uppercase text-gray-600">Size</div>
-            <div className="grid grid-cols-6 gap-2 sm:grid-cols-8">
-              {sizes.map((s) => (
-                <button
-                  key={s}
-                  onClick={() => setSize(s)}
-                  className={`h-9 rounded border text-xs ${
-                    size === s
-                      ? "bg-gray-900 text-white"
-                      : "hover:bg-gray-100 text-gray-700"
-                  }`}
-                >
-                  {s}
-                </button>
-              ))}
-            </div>
-          </div>
+       {/* Purchase panel */}
+<aside className="lg:col-span-4 space-y-6">
+  <h1 className="text-lg font-semibold uppercase tracking-wide">{product?.name}</h1>
+  <div className="mt-1 text-sm text-gray-700">
+    Rs.{price.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+  </div>
 
-          {/* Actions */}
-          <div className="mt-5 flex gap-2">
-            <button onClick={()=>product && size && handleAddToCart(product.id, size)} className="flex-1 rounded bg-black px-4 py-2 text-sm font-medium text-white hover:bg-black/90">
-              Add to cart
-            </button>
-            <button
-              className="rounded border px-3 text-sm hover:bg-gray-100"
-              aria-label="Add to wishlist"
-            >
-              ☆
-            </button>
-          </div>
+ {/* Horizontal Images Card */}
+<div className="mt-6">
+  <h2 className="text-sm font-medium text-gray-900 mb-2">More Images</h2>
+  <div className="flex gap-2 overflow-x-auto scrollbar-hide">
+    {product?.images.map((img, idx) => (
+      <div key={idx} className="relative w-24 h-32 flex-shrink-0 rounded border overflow-hidden">
+        <Image src={img} alt={`Product image ${idx + 1}`} fill className="object-cover" />
+      </div>
+    ))}
+  </div>
+</div>
 
-          {/* Highlights */}
-          <ul className="mt-4 space-y-2 text-xs text-gray-600">
-            <li>In stock – Limited stock</li>
-            <li>Free shipping on orders over 99€</li>
-            <li>Free returns for select regions</li>
-          </ul>
 
-          {/* Description */}
-          <div className="mt-6 border-t pt-4">
-            <h2 className="text-sm font-semibold text-gray-900">Description</h2>
-            <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-gray-600">
-              <li>Relaxed fit</li>
-              <li>100% cotton</li>
-              <li>Large discharge print on the back</li>
-              <li>Logo print on chest</li>
-              <li>270 GSM</li>
-            </ul>
-          </div>
+  {/* Sizes */}
+  <div className="mt-5">
+    <div className="mb-2 text-xs font-medium uppercase text-gray-600">Size</div>
+    <div className="grid grid-cols-6 gap-2 sm:grid-cols-8">
+      {sizes.map((s) => (
+        <button
+          key={s}
+          onClick={() => setSize(s)}
+          className={`h-9 rounded border text-xs ${
+            size === s ? "bg-gray-900 text-white" : "hover:bg-gray-100 text-gray-700"
+          }`}
+        >
+          {s}
+        </button>
+      ))}
+    </div>
+  </div>
 
-          {/* Accordions (simplified) */}
-          <div className="mt-4 divide-y border">
-            {[
-              { title: "Material & Care", body: "100% cotton. Machine wash cold, inside out." },
-              { title: "Further information", body: "Designed in EU. Imported." },
-            ].map((a, i) => (
-              <details key={i} className="p-3">
-                <summary className="cursor-pointer text-sm font-medium text-gray-900">{a.title}</summary>
-                <p className="mt-2 text-sm text-gray-600">{a.body}</p>
-              </details>
-            ))}
-          </div>
-        </aside>
+  {/* Actions */}
+  <div className="mt-5 flex gap-2">
+    <button
+      onClick={() => product && size && handleAddToCart(product.id, size)}
+      className="flex-1 rounded bg-black px-4 py-2 text-sm font-medium text-white hover:bg-black/90"
+    >
+      Add to cart
+    </button>
+    <button className="rounded border px-3 text-sm hover:bg-gray-100" aria-label="Add to wishlist">
+      ☆
+    </button>
+  </div>
+
+{/* Highlights */}
+<ul className="mt-4 space-y-2 text-xs text-gray-600">
+  <li className="flex items-center gap-2 text-red-400">
+    {/* Clock Icon */}
+    <svg
+      className="w-4 h-4"
+      strokeWidth="1"
+      aria-hidden="true"
+      focusable="false"
+      role="presentation"
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 16 16"
+      fill="none"
+      stroke="currentColor"
+    >
+      <circle cx="8" cy="8" r="6.7097588" fill="none" />
+      <polyline
+        points="12 6 12 12 16 14"
+        transform="matrix(0.67097581,0,0,0.67097581,-0.01963672,-0.01963672)"
+      />
+    </svg>
+    4 in stock – Limited stock
+  </li>
+
+  <li className="flex items-center gap-2">
+    {/* Award Icon */}
+    <svg
+      className="w-4 h-4"
+      strokeWidth="1"
+      aria-hidden="true"
+      focusable="false"
+      role="presentation"
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 16 16"
+      fill="none"
+      stroke="currentColor"
+    >
+      <circle cx="8.108" cy="5.666" r="4.374" fill="none" />
+      <polyline
+        points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"
+        transform="matrix(0.624895,0,0,0.624895,0.60942571,0.66666362)"
+      />
+    </svg>
+    Free shipping on orders over 99€
+  </li>
+
+  <li className="flex items-center gap-2">
+    {/* Box Icon */}
+    <svg
+      className="w-4 h-4"
+      strokeWidth="1"
+      aria-hidden="true"
+      focusable="false"
+      role="presentation"
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 16 16"
+      fill="currentColor"
+    >
+      <path d="M14.41 3.37L8.27 1.41a1 1 0 00-.61 0L1.52 3.37a1 1 0 00-.7.95v7.86c0 .41.25.78.63.93l6.14 2.46c.24.1.5.1.75 0l6.14-2.46a1 1 0 00.62-.93V4.32a1 1 0 00-.69-.95zM7.96 2.36l6.05 1.93-2.7.9L5.35 3.2l2.63-.84zm-.46 12.1l-5.68-2.28V5.3L7.5 7.2v7.26zM8 6.3L1.96 4.28l2.58-.82 5.99 2L8 6.3zm6.1 5.89l-5.6 2.24V7.19l5.6-1.87v6.87z" />
+    </svg>
+    Free returns for select regions
+  </li>
+</ul>
+
+
+  {/* Description */}
+  <div className="mt-6 border-t pt-4">
+    <h2 className="text-sm font-semibold text-gray-900">Description</h2>
+    <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-gray-600">
+      <li>Relaxed fit</li>
+      <li>100% cotton</li>
+      <li>Large discharge print on the back</li>
+      <li>Logo print on chest</li>
+      <li>270 GSM</li>
+    </ul>
+  </div>
+
+{/* Accordions */}
+<div className="mt-4 border-t border-b divide-y divide-gray-200">
+  {[
+    {
+      title: "Material & Care",
+      body: "100% cotton. Machine wash cold, inside out.",
+      icon: (
+        <svg
+          className="w-4 h-4 mr-2 flex-shrink-0"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4h16v16H4V4z" />
+        </svg>
+      ),
+    },
+    {
+      title: "Further information",
+      body: "Designed in EU. Imported.",
+      icon: (
+        <svg
+          className="w-4 h-4 mr-2 flex-shrink-0"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+        </svg>
+      ),
+    },
+  ].map((a, i) => (
+    <details key={i} className="p-3 group">
+      <summary className="cursor-pointer text-sm font-medium text-gray-900 flex items-center justify-between">
+        <div className="flex items-center">
+          {a.icon}
+          {a.title}
+        </div>
+        <span className="transition-transform group-open:rotate-45 text-gray-500 font-bold">+</span>
+      </summary>
+      <p className="mt-2 text-sm text-gray-600">{a.body}</p>
+    </details>
+  ))}
+</div>
+
+
+</aside>
+
+
+
+
       </section>
 
       {/* Cross-sell sections */}

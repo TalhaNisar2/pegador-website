@@ -6,6 +6,9 @@ import Link from "next/link";
 import { ShoppingCartSidebar } from "./Sidebar";
 import { useSelector } from "react-redux";
 import { RootState } from "../store/store";
+import { motion } from "framer-motion";
+
+
 
 const links = ["Men", "Women", "Essentials", "LookBooks"];
 
@@ -135,6 +138,8 @@ export default function Navbar() {
     }
   }, [activeLink, hoverLink]);
 
+
+    const sparkles = Array.from({ length: 5 });
   return (
     <nav className="w-full bg-white relative z-50">
       <div className="flex items-center justify-between px-2 md:px-6 py-4 relative">
@@ -165,9 +170,29 @@ export default function Navbar() {
           />
         </div>
 
-        {/* Brand Name */}
-        <div className="font-extrabold italic text-2xl text-center text-black">PEGADOR</div>
+    
 
+<div className="flex justify-center">
+  <Link href="/">
+    <motion.div
+      className="font-extrabold italic text-2xl md:text-3xl text-black cursor-pointer select-none"
+      initial={{ scale: 0.8, opacity: 0 }}
+      animate={{ scale: 1, opacity: 1 }}
+      whileHover={{
+        scale: 1.1,
+        rotate: [0, 5, -5, 0], // subtle wobble
+      }}
+      transition={{
+        type: "tween", // allows multiple keyframes
+        duration: 0.5,
+      }}
+    >
+      FashionFy
+    </motion.div>
+  </Link>
+</div>
+
+    
      {/* Right Icons */}
 <div className="flex items-center space-x-4 text-black cursor-pointer">
   {/* Search Icon */}
@@ -192,8 +217,9 @@ export default function Navbar() {
     <Image src="/Pakistan.webp" alt="Pakistan" fill className="object-cover" />
   </div>
 
-  {/* User Icon */}
-  <div className="p-1 rounded-full cursor-pointer">
+ {/* User Icon */}
+<Link href="/login">
+  <div className="p-1 rounded-full cursor-pointer hover:bg-gray-100 transition">
     <svg
       width="24"
       height="24"
@@ -216,6 +242,8 @@ export default function Navbar() {
       </g>
     </svg>
   </div>
+</Link>
+
 
 {/* Star Icon */}
 <Link href="/wishlist">
