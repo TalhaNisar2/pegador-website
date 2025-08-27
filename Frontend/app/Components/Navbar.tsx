@@ -4,6 +4,8 @@ import Image from "next/image";
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { ShoppingCartSidebar } from "./Sidebar";
+import { useSelector } from "react-redux";
+import { RootState } from "../store/store";
 
 const links = ["Men", "Women", "Essentials", "LookBooks"];
 
@@ -111,6 +113,7 @@ const lookbooksData = {
 };
 
 export default function Navbar() {
+  const {items}=useSelector((state:RootState)=>state.cart);
   const [isCartOpen, setIsCartOpen] = useState(false);
 
   const [activeLink, setActiveLink] = useState("Men");
@@ -231,7 +234,7 @@ export default function Navbar() {
   </div>
 </Link>
 
-  <div className="p-1 rounded-full cursor-pointer" onClick={() => setIsCartOpen(true)}>
+  <div className="p-1 rounded-full cursor-pointer relative" onClick={() => setIsCartOpen(true)}>
           <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none">
             <g fill="none" fillRule="evenodd">
               <path d="M0 0h24v24H0z"></path>
@@ -239,6 +242,9 @@ export default function Navbar() {
               <path stroke="currentColor" strokeWidth="1.5" d="M5.357 7.705h13.286l1.107 13.563H4.25z"></path>
             </g>
           </svg>
+          <div className="bg-black text-xs text-white rounded-full h-4 w-4 flex items-center justify-center absolute -top-1 -right-1">
+            {items.length}
+          </div>
         </div>
 </div>
 
