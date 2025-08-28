@@ -1,108 +1,161 @@
 "use client";
+import React, { useState, useContext, ChangeEvent, FormEvent } from 'react';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import summaryApi from '../common/index';
+import Context from '../context/index';
 
-import { useState } from "react";
-import { motion } from "framer-motion";
-import { Input } from "@/app/Components/ui/input";
-import { Button } from "@/app/Components/ui/button";
-import { Label } from "@/app/Components/ui/label";
-import Link from "next/link";
-import { Eye, EyeOff } from "lucide-react";
+interface LoginData {
+  email: string;
+  password: string;
+}
 
-export default function LoginPage() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
+interface AppContextType {
+  fetchUserDetails: () => Promise<void>;
+  fetchUserAddToCart: () => Promise<void>;
+  fetchUserWishlistCount: () => Promise<void>;
+}
 
-  const handleLogin = (e: React.FormEvent) => {
+const LoginForm: React.FC = () => {
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [data, setData] = useState<LoginData>({
+    email: '',
+    password: '',
+  });
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const context = useContext(Context);
+  if (!context) {
+    throw new Error("Context must be used within a Context Provider");
+  }
+  const { fetchUserDetails, fetchUserAddToCart, fetchUserWishlistCount } = context as AppContextType;
+
+  const handleTogglePassword = () => setShowPassword(!showPassword);
+
+  const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("Login Attempt:", { email, password });
+    setIsLoading(true);
+
+    try {
+      const dataResponse = await fetch(summaryApi.signIn.url, {
+        method: summaryApi.signIn.method,
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+
+      const response = await dataResponse.json();
+
+      if (dataResponse.ok) {
+        toast.success('Login successful!', {
+          style: { background: 'linear-gradient(to right, #4a90e2, #9013fe)', color: 'white' },
+          autoClose: 2000,
+        });
+
+        await fetchUserDetails();
+        await fetchUserAddToCart();
+        await fetchUserWishlistCount();
+
+        setTimeout(() => {
+          setIsLoading(false);
+        }, 2000);
+      } else {
+        toast.error(response.message || 'Failed to login. Please try again.', {
+          style: { background: 'linear-gradient(to right, #e94e77, #ff6b6b)', color: 'white' },
+          autoClose: 3000,
+        });
+        setIsLoading(false);
+      }
+    } catch (error) {
+      toast.error('An unexpected error occurred. Please try again.', {
+        style: { background: 'linear-gradient(to right, #e94e77, #ff6b6b)', color: 'white' },
+        autoClose: 3000,
+      });
+      setIsLoading(false);
+    }
   };
 
   return (
-    <div className="relative flex items-center justify-center min-h-screen bg-gray-100 overflow-hidden">
-      {/* Background abstract shapes */}
-      <div className="absolute -top-32 -left-32 w-72 h-72 bg-gray-300 rounded-full blur-3xl opacity-20"></div>
-      <div className="absolute -bottom-32 -right-32 w-96 h-96 bg-gray-400 rounded-full blur-3xl opacity-15"></div>
+    <>
+      <ToastContainer />
+      <div className="flex justify-center items-center min-h-screen bg-gray-100">
+        <div className="w-full max-w-md p-8 bg-white shadow-lg rounded-lg border border-gray-300">
+          <form onSubmit={handleSubmit}>
+            {/* Email */}
+            <div className="mb-4">
+              <label htmlFor="email" className="block text-gray-700 mb-2">
+                Email
+              </label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                placeholder="Enter your email"
+                onChange={handleOnChange}
+                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+              />
+            </div>
 
-      {/* Login Card */}
-      <motion.div
-        initial={{ opacity: 0, y: 50, scale: 0.95 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
-        transition={{ duration: 0.8 }}
-        className="relative z-10 w-full max-w-md p-10 rounded-3xl backdrop-blur-lg bg-white/80 border border-gray-300 shadow-2xl"
-      >
-        <motion.h1
-          className="text-4xl md:text-5xl font-extrabold text-center text-black mb-8 tracking-wider"
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-        >
-          Fashionfy
-        </motion.h1>
-
-        <form onSubmit={handleLogin} className="space-y-6">
-          <div>
-            <Label htmlFor="email" className="text-gray-700 font-medium">
-              Email
-            </Label>
-            <Input
-              id="email"
-              type="email"
-              placeholder="you@example.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="mt-2 bg-gray-100 text-black placeholder-gray-500 border-gray-300 focus:ring-2 focus:ring-gray-500"
-            />
-          </div>
-
-          <div>
-            <Label htmlFor="password" className="text-gray-700 font-medium">
-              Password
-            </Label>
-            <div className="relative mt-2">
-              <Input
+            {/* Password */}
+            <div className="mb-6 relative">
+              <label htmlFor="password" className="block text-gray-700 mb-2">
+                Password
+              </label>
+              <input
+                type={showPassword ? 'text' : 'password'}
                 id="password"
-                type={showPassword ? "text" : "password"}
-                placeholder="••••••••"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="bg-gray-100 text-black placeholder-gray-500 border-gray-300 focus:ring-2 focus:ring-gray-500 pr-12"
+                name="password"
+                placeholder="Enter your password"
+                onChange={handleOnChange}
+                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
               />
               <button
                 type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-black"
+                onClick={handleTogglePassword}
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500"
               >
-                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                {showPassword ? <FaEyeSlash /> : <FaEye />}
               </button>
             </div>
-            <div className="text-right mt-1">
-              <Link
-                href="/forgot-password"
-                className="text-sm text-gray-700 hover:underline"
+
+            {/* Submit */}
+            <div className="mb-4">
+              <button
+                type="submit"
+                className="w-full px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white font-bold rounded-md hover:from-blue-600 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
+                Login
+              </button>
+            </div>
+
+            {/* Forgot Password */}
+            <div className="text-center mb-4">
+              <Link to="/forgot-password" className="text-blue-500 hover:text-blue-700">
                 Forgot Password?
               </Link>
             </div>
-          </div>
 
-          <motion.div whileTap={{ scale: 0.95 }}>
-            <Button
-              type="submit"
-              className="w-full bg-black text-white font-bold py-3 rounded-xl shadow-md hover:bg-gray-800 transition"
-            >
-              Login
-            </Button>
-          </motion.div>
-        </form>
-
-        <p className="mt-8 text-sm text-center text-gray-600">
-          Don’t have an account?{" "}
-          <Link href="/signup" className="font-semibold text-black hover:underline">
-            Sign up
-          </Link>
-        </p>
-      </motion.div>
-    </div>
+            {/* Sign Up Link */}
+            <div className="text-center">
+              <p className="text-gray-700">
+                Don't have an account?{' '}
+                <Link to="/SignUp" className="text-blue-500 hover:text-blue-700 font-bold">
+                  Sign Up
+                </Link>
+              </p>
+            </div>
+          </form>
+        </div>
+      </div>
+    </>
   );
-}
+};
+
+export default LoginForm;

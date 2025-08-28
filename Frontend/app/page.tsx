@@ -1,13 +1,30 @@
-import Image from "next/image";
+"use client";
+import Context from "./context/index";
+import { useState } from "react";
 import Hero from "./Components/Hero";
-import Navbar from "./Components/Navbar";
 import Footer from "./Components/Footer";
 
+export default function Layout({ children }: { children: React.ReactNode }) {
+  const [cartProductCount, setCartProductCount] = useState(0);
+  const [wishlistCount, setWishlistCount] = useState(0);
 
-export default function Home() {
+  const fetchUserAddToCart = async () => { /* ... */ };
+  const fetchUserWishlistCount = async () => { /* ... */ };
+  const fetchUserDetails = async () => { /* ... */ };
+
   return (
-    <main className="bg-white">
+    <Context.Provider
+      value={{
+        fetchUserDetails,
+        cartProductCount,
+        fetchUserAddToCart,
+        wishlistCount,
+        fetchUserWishlistCount,
+      }}
+    >
       <Hero />
-    </main>
+      <main>{children}</main>
+      <Footer />
+    </Context.Provider>
   );
 }
