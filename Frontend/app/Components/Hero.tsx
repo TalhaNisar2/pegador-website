@@ -7,30 +7,31 @@ import FeaturedSlider from "./FeaturedSlider";
 export default function Hero() {
   return (
     <section>
-      {/* Hero Banner */}
-      <div className="relative w-full min-h-[90vh] md:min-h-[110vh]">
-        <Image
-          src="/hero/hero1.webp"
-          alt="FW 25 Collection"
-          fill
-          className="object-cover"
-          priority
-        />
-        <div className="absolute bottom-12 left-1/2 transform -translate-x-1/2 text-center px-4">
-          <p className="text-white text-sm mb-2 tracking-wide">
-            NEW FW ’25 COLLECTION | FIRST ARRIVALS ONLINE NOW
-          </p>
-          <h1 className="text-white text-5xl md:text-7xl font-bold mb-6 whitespace-nowrap">
-            Everyday Ambition.
-          </h1>
-           <Link
-            href="/products"
-            className="bg-white text-black px-6 py-3 text-sm font-normal cursor-pointer hover:bg-black hover:text-white transition"
-          >
-            SHOP MEN
-          </Link>
-        </div>
-      </div>
+     {/* Hero Banner */}
+<div className="relative w-full min-h-[90vh] md:min-h-[110vh]">
+  <Image
+    src="/hero/hero1.webp"
+    alt="FW 25 Collection"
+    fill
+    className="object-cover"
+    priority
+  />
+  <div className="absolute bottom-12 left-1/2 transform -translate-x-1/2 text-center px-4">
+    <p className="text-white text-xs sm:text-sm md:text-base mb-2 tracking-wide">
+      NEW FW ’25 COLLECTION | FIRST ARRIVALS ONLINE NOW
+    </p>
+    <h1 className="text-white text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold mb-6 whitespace-nowrap">
+      Everyday Ambition.
+    </h1>
+    <Link
+      href="/products"
+      className="bg-white text-black px-4 sm:px-6 py-2 sm:py-3 text-xs sm:text-sm md:text-base font-normal cursor-pointer hover:bg-black hover:text-white transition"
+    >
+      SHOP MEN
+    </Link>
+  </div>
+</div>
+
 
       {/* Two-Image Section */}
       <div className="px-2 md:px-6 grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
@@ -62,29 +63,29 @@ export default function Hero() {
       </div>
 
       {/* Full Width Banner */}
-      <div className="relative w-full min-h-[90vh] md:min-h-[110vh] mt-10">
-        <Image
-          src="/hero/hero5.webp"
-          alt="FW 25 Collection"
-          fill
-          className="object-cover"
-          priority
-        />
-        <div className="absolute bottom-12 left-1/2 transform -translate-x-1/2 text-center px-4">
-          <p className="text-white text-sm mb-2 tracking-wide">
-            NEW FW ’25 COLLECTION | FIRST ARRIVALS ONLINE NOW
-          </p>
-          <h1 className="text-white text-5xl md:text-7xl font-bold mb-6 whitespace-nowrap">
-            Everyday Ambition.
-          </h1>
-          <Link
-            href="/products"
-            className="bg-white text-black px-6 py-3 text-sm font-normal cursor-pointer hover:bg-black hover:text-white transition"
-          >
-            SHOP WOMEN
-          </Link>
-        </div>
-      </div>
+<div className="relative w-full min-h-[90vh] md:min-h-[110vh] mt-10">
+  <Image
+    src="/hero/hero5.webp"
+    alt="FW 25 Collection"
+    fill
+    className="object-cover"
+    priority
+  />
+  <div className="absolute bottom-12 left-1/2 transform -translate-x-1/2 text-center px-4">
+    <p className="text-white text-xs sm:text-sm mb-2 tracking-wide">
+      NEW FW ’25 COLLECTION | FIRST ARRIVALS ONLINE NOW
+    </p>
+    <h1 className="text-white text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold mb-6 whitespace-nowrap">
+      Everyday Ambition.
+    </h1>
+    <Link
+      href="/products"
+      className="bg-white text-black px-4 sm:px-6 py-2 sm:py-3 text-xs sm:text-sm font-normal cursor-pointer hover:bg-black hover:text-white transition"
+    >
+      SHOP WOMEN
+    </Link>
+  </div>
+</div>
 
       {/* Summer Banner */}
       <div className="relative w-full min-h-[80vh] md:min-h-[90vh]">

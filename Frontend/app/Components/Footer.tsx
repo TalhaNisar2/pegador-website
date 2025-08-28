@@ -28,13 +28,13 @@ export default function Footer() {
   ];
 
   return (
-    <footer className="bg-[#F0F0F0] text-black py-24 px-4 md:px-6">
+    <footer className="bg-[#F0F0F0] text-black py-12 px-4 sm:px-6 md:px-12">
       {/* Columns */}
-      <div className="flex flex-col md:flex-row justify-between gap-8">
+      <div className="flex flex-col md:flex-row justify-between gap-8 md:gap-16">
         {/* Column 1 */}
-        <div>
+        <div className="flex-1 min-w-[140px]">
           <h3 className="font-normal mb-4">CUSTOMER SERVICE</h3>
-          <ul className="space-y-3">
+          <ul className="space-y-2">
             {column1.map((link) => (
               <li key={link}>
                 <a
@@ -49,9 +49,9 @@ export default function Footer() {
         </div>
 
         {/* Column 2 */}
-        <div>
+        <div className="flex-1 min-w-[140px]">
           <h3 className="font-normal mb-4">ABOUT PEGADOR®</h3>
-          <ul className="space-y-3">
+          <ul className="space-y-2">
             {column2.map((link) => (
               <li key={link}>
                 <a
@@ -66,9 +66,9 @@ export default function Footer() {
         </div>
 
         {/* Column 3 */}
-        <div>
+        <div className="flex-1 min-w-[140px]">
           <h3 className="font-normal mb-4">LEGAL</h3>
-          <ul className="space-y-3">
+          <ul className="space-y-2">
             {column3.map((link) => (
               <li key={link}>
                 <a
@@ -83,14 +83,14 @@ export default function Footer() {
         </div>
 
         {/* Column 4 - Social Links */}
-        <div className="w-full md:w-auto">
+        <div className="flex-1 min-w-[140px] mt-6 md:mt-0">
           <h3 className="font-normal mb-4 text-left">SOCIAL</h3>
-          <div className="flex space-x-4 text-2xl">
+          <div className="flex flex-wrap md:flex-nowrap gap-4 text-xl">
             {socialLinks.map((social) => (
               <a
                 key={social.name}
                 href="#"
-                className="text-black hover:text-orange-500 transition"
+                className="text-black hover:text-orange-500 transition text-lg sm:text-xl"
                 aria-label={social.name}
               >
                 {social.icon}
@@ -101,14 +101,14 @@ export default function Footer() {
       </div>
 
       {/* Bottom Row */}
-      <div className="mt-20 pt-6 flex flex-col md:flex-row items-center justify-between gap-4">
+      <div className="mt-12 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
         {/* Left: Copyright */}
-        <div className="text-sm text-gray-600">
+        <div className="text-sm text-gray-600 text-center sm:text-left">
           &copy; {new Date().getFullYear()} PEGADOR®
         </div>
 
         {/* Right: Payment Icons */}
-        <div className="flex space-x-2">
+        <div className="flex flex-wrap gap-2 justify-center sm:justify-end mt-4 sm:mt-0">
           {paymentIcons.map((icon) => (
             <div
               key={icon.alt}

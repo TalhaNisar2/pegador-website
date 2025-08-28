@@ -19,22 +19,6 @@ interface AddProductFormProps {
   isEditing?: boolean;
 }
 
-const categories = {
-  MEN: [
-    "All Essentials", "Tees", "Hoodies", "Sweat Jackets", "Long-sleeved shirts",
-    "Sweaters", "Track Jackets", "Pants & Joggers", "Shorts", "Swim Shorts"
-  ],
-  WOMEN: [
-    "All Essentials", "Tees & Tops", "Hoodies", "Sweat Jackets", "Sweaters",
-    "Track Jackets", "Pants", "Shorts", "Leggings"
-  ],
-  UNISEX: [
-    "Tops", "Tees", "Hoodies", "Sweat Jackets", "Shirts", "Sweaters",
-    "Long-sleeved shirts", "Track Jackets", "Bodysuits", "Shorts", "Pants",
-    "Jeans", "Leggings", "Vests", "Jackets", "Slides", "Footwear",
-    "Socks", "Underwear", "Sunglasses", "Perfumes", "Caps & Hats", "Bags", "Beanies", "Utilities"
-  ]
-};
 
 const commonSizes = {
   clothing: ["XS", "S", "M", "L", "XL", "XXL"],
@@ -45,6 +29,14 @@ const commonSizes = {
 export function AddProductForm({ onSubmit, onCancel, initialData, isEditing }: AddProductFormProps) {
   const { toast } = useToast();
   
+
+   const [categories, setCategories] = useState<{ [key: string]: string[] }>({
+    MEN: ["Shirts", "Pants", "Shoes"],
+    WOMEN: ["Dresses", "Bags", "Shoes"],
+    UNISEX: ["Accessories"],
+  });
+
+  // ✅ single source of truth for formData
   const [formData, setFormData] = useState({
     name: initialData?.name || "",
     description: initialData?.description || "",
@@ -60,6 +52,24 @@ export function AddProductForm({ onSubmit, onCancel, initialData, isEditing }: A
     manufacturer: initialData?.manufacturer || "",
     companyName: initialData?.companyName || "",
   });
+
+  const addCategory = (newCat: string) => {
+    if (!categories[newCat]) {
+      setCategories({ ...categories, [newCat]: [] });
+    }
+    setFormData({ ...formData, category: newCat, subcategory: "" });
+  };
+
+  const addSubcategory = (newSub: string) => {
+    if (formData.category) {
+      setCategories({
+        ...categories,
+        [formData.category]: [...(categories[formData.category] || []), newSub],
+      });
+      setFormData({ ...formData, subcategory: newSub });
+    }
+  };
+
 
   const [newSize, setNewSize] = useState("");
   const [newColor, setNewColor] = useState("");
@@ -117,6 +127,8 @@ export function AddProductForm({ onSubmit, onCancel, initialData, isEditing }: A
     setFormData({ ...formData, images: formData.images.filter(i => i !== image) });
   };
 
+
+
   return (
     <div className="space-y-6 text-gray-800">
       {/* Header */}
@@ -165,39 +177,78 @@ export function AddProductForm({ onSubmit, onCancel, initialData, isEditing }: A
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <Label htmlFor="category" className="text-blue-700">Category *</Label>
-                  <Select value={formData.category} onValueChange={(value) => setFormData({ ...formData, category: value })}>
-                    <SelectTrigger className="border-gray-700 text-gray-800 focus:border-blue-600 focus:ring-blue-600">
-                      <SelectValue placeholder="Select category" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {Object.keys(categories).map((cat) => (
-                        <SelectItem key={cat} value={cat} className="text-gray-800">{cat}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
+       <div className="grid grid-cols-2 gap-4">
+  {/* Category */}
+  <div>
+    <Label className="text-blue-700">Category *</Label>
+    <Select
+      value={formData.category}
+      onValueChange={(value) =>
+        setFormData({ ...formData, category: value, subcategory: "" })
+      }
+    >
+      <SelectTrigger className="border-gray-700 text-gray-800 bg-gray-100 focus:border-blue-600 focus:ring-blue-600">
+        <SelectValue placeholder="Select category" className="text-gray-800" />
+      </SelectTrigger>
+      <SelectContent className="bg-gray-100 text-gray-800">
+        {Object.keys(categories).map((cat) => (
+          <SelectItem key={cat} value={cat} className="text-gray-800">
+            {cat}
+          </SelectItem>
+        ))}
+        <div className="p-2 bg-gray-100">
+          <Input
+            placeholder="Add category"
+            className="bg-gray-200 text-gray-800 focus:border-blue-600 focus:ring-blue-600"
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && e.currentTarget.value.trim()) {
+                addCategory(e.currentTarget.value.trim());
+                e.currentTarget.value = "";
+              }
+            }}
+          />
+        </div>
+      </SelectContent>
+    </Select>
+  </div>
 
-                <div>
-                  <Label htmlFor="subcategory" className="text-blue-700">Subcategory</Label>
-                  <Select 
-                    value={formData.subcategory} 
-                    onValueChange={(value) => setFormData({ ...formData, subcategory: value })}
-                    disabled={!formData.category}
-                  >
-                    <SelectTrigger className="border-gray-700 text-gray-800 focus:border-blue-600 focus:ring-blue-600">
-                      <SelectValue placeholder="Select subcategory" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {formData.category && categories[formData.category as keyof typeof categories]?.map((subcat) => (
-                        <SelectItem key={subcat} value={subcat} className="text-gray-800">{subcat}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
+  {/* Subcategory */}
+  <div>
+    <Label className="text-blue-700">Subcategory</Label>
+    <Select
+      value={formData.subcategory}
+      onValueChange={(value) => setFormData({ ...formData, subcategory: value })}
+      disabled={!formData.category}
+    >
+      <SelectTrigger className="border-gray-700 text-gray-800 bg-gray-100 focus:border-blue-600 focus:ring-blue-600">
+        <SelectValue placeholder="Select subcategory" className="text-gray-800" />
+      </SelectTrigger>
+      <SelectContent className="bg-gray-100 text-gray-800">
+        {formData.category &&
+          categories[formData.category]?.map((subcat) => (
+            <SelectItem key={subcat} value={subcat} className="text-gray-800">
+              {subcat}
+            </SelectItem>
+          ))}
+        {formData.category && (
+          <div className="p-2 bg-gray-100">
+            <Input
+              placeholder="Add subcategory"
+              className="bg-gray-200 text-gray-800 focus:border-blue-600 focus:ring-blue-600"
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && e.currentTarget.value.trim()) {
+                  addSubcategory(e.currentTarget.value.trim());
+                  e.currentTarget.value = "";
+                }
+              }}
+            />
+          </div>
+        )}
+      </SelectContent>
+    </Select>
+  </div>
+</div>
+
 
               <div>
                 <Label htmlFor="price" className="text-blue-700">Price ($) *</Label>
@@ -215,44 +266,88 @@ export function AddProductForm({ onSubmit, onCancel, initialData, isEditing }: A
             </CardContent>
           </Card>
 
-          {/* Images */}
-          <Card className="dashboard-card border-gray-700">
-            <CardHeader>
-              <CardTitle className="text-blue-700">Product Images</CardTitle>
-              <CardDescription className="text-gray-500">Upload multiple product images</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="flex gap-2">
-                <Input
-                  value={newImage}
-                  onChange={(e) => setNewImage(e.target.value)}
-                  placeholder="Image URL"
-                  className="form-input border-gray-700 text-gray-800 placeholder:text-gray-400 focus:border-blue-600 focus:ring-blue-600"
-                />
-                <Button type="button" onClick={addImage} className="gap-2 bg-blue-600 text-white hover:bg-blue-700 transition-colors">
-                  <Plus className="h-4 w-4" />
-                  Add
-                </Button>
-              </div>
+  {/* Images */}
+<Card className="dashboard-card border-gray-700">
+  <CardHeader>
+    <CardTitle className="text-blue-700">Product Images</CardTitle>
+    <CardDescription className="text-gray-500">Upload multiple product images</CardDescription>
+  </CardHeader>
+  <CardContent className="space-y-4">
+    {/* Upload & URL Input */}
+    <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
+      {/* Upload from device */}
+      <label className="cursor-pointer flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-800 border border-gray-300 rounded hover:bg-gray-200 transition-colors">
+        <input
+          type="file"
+          multiple
+          accept="image/*"
+          className="hidden"
+          onChange={(e) => {
+            if (e.target.files) {
+              const filesArray = Array.from(e.target.files);
+              const newImages = filesArray.map((file) => URL.createObjectURL(file));
+              setFormData({ ...formData, images: [...formData.images, ...newImages] });
+            }
+          }}
+        />
+        <Plus className="h-4 w-4 text-blue-600" />
+        <span className="text-gray-700 cursor-pointer">Upload Images</span>
+      </label>
 
-              <div className="space-y-2">
-                {formData.images.map((image, index) => (
-                  <div key={index} className="flex items-center justify-between p-2 border border-gray-700 rounded">
-                    <span className="text-sm truncate text-gray-800">{image}</span>
-                    <Button
-                      type="button"
-                      variant="destructive"
-                      size="sm"
-                      className="border-red-600 text-red-600 hover:bg-red-600 hover:text-white"
-                      onClick={() => removeImage(image)}
-                    >
-                      <X className="h-4 w-4" />
-                    </Button>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
+      {/* Add from URL */}
+      <div className="flex gap-2 items-center">
+        <Input
+          placeholder="Image URL"
+          value={newImage}
+          onChange={(e) => setNewImage(e.target.value)}
+          className="border-gray-700 text-gray-800 placeholder:text-gray-400 focus:border-blue-600 focus:ring-blue-600 cursor-pointer"
+        />
+        <Button
+          type="button"
+          onClick={() => {
+            if (newImage.trim()) {
+              setFormData({ ...formData, images: [...formData.images, newImage.trim()] });
+              setNewImage("");
+            }
+          }}
+          className="bg-blue-600 text-white hover:bg-blue-700 transition-colors cursor-pointer px-4 py-2 rounded"
+        >
+          Add
+        </Button>
+      </div>
+    </div>
+
+    {/* Image Previews */}
+    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mt-4">
+      {formData.images.map((image, index) => (
+        <div
+          key={index}
+          className="relative w-full h-40 rounded-lg overflow-hidden border border-gray-300 shadow hover:shadow-lg transition-shadow"
+        >
+          <img
+            src={image}
+            alt={`Preview ${index}`}
+            className="w-full h-full object-cover"
+          />
+          <button
+            type="button"
+            onClick={() =>
+              setFormData({
+                ...formData,
+                images: formData.images.filter((_, i) => i !== index),
+              })
+            }
+            className="absolute top-2 right-2 bg-red-600 text-white rounded-full p-1 hover:bg-red-700 shadow-md cursor-pointer"
+          >
+            <X className="h-4 w-4" />
+          </button>
+        </div>
+      ))}
+    </div>
+  </CardContent>
+</Card>
+
+
         </div>
 
         {/* Variants and Details */}
