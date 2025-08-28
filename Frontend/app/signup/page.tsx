@@ -6,7 +6,7 @@ import { Input } from "@/app/Components/ui/input";
 import { Button } from "@/app/Components/ui/button";
 import { Label } from "@/app/Components/ui/label";
 import { Eye, EyeOff } from "lucide-react"; // optional icon library
-
+import axios from "axios";
 export default function SignUpPage() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -20,8 +20,21 @@ export default function SignUpPage() {
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  const handleSignUp = (e: React.FormEvent) => {
+  const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
+    try{
+
+      const res=await axios.post("http://localhost:8000/api/signup",{
+        firstName,
+      lastName,
+      email,
+      password,
+      confirmPassword,
+      profilePic,
+    })
+  }catch(err){
+    console.log('Error', err)
+  }
     console.log({
       firstName,
       lastName,

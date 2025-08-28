@@ -17,15 +17,18 @@ const upload = multer({ storage: storage });
 
 async function userSignUp(req, res) {
     try {
-        const { email, password, name } = req.body;
+        const { email, password, firstName,lastName } = req.body;
         const profilePic = req.file ? req.file.path : null;
 
         // Validate input
         if (!email) {
             throw new Error("Please provide email");
         }
-        if (!name) {
-            throw new Error("Please provide name");
+        if (!firstName) {
+            throw new Error("Please provide fist name");
+        }
+        if(!lastName){
+            throw new Error("Please provide last name")
         }
         if (!password) {
             throw new Error("Please provide password");
