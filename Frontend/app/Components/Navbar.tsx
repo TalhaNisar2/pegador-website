@@ -1,13 +1,14 @@
 "use client";
 
 import Image from "next/image";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useContext } from "react";
 import Link from "next/link";
 import { ShoppingCartSidebar } from "./Sidebar";
 import { useSelector } from "react-redux";
 import { RootState } from "../store/store";
 import { motion } from "framer-motion";
 import { Search, Heart, ChevronDown } from "lucide-react";
+import Context from "../context/index";
 
 const links = ["Men", "Women", "Essentials", "LookBooks"];
 
@@ -100,7 +101,10 @@ const lookbooksData = {
 
 export default function Navbar() {
   const { items } = useSelector((state: RootState) => state.cart);
+  const context = useContext(Context);
+  if (!context) throw new Error("Navbar must be wrapped in Context.Provider");
 
+  const { user } = context; // Assuming your Context stores logged-in user in `user`
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [activeLink, setActiveLink] = useState("Men");
   const [hoverLink, setHoverLink] = useState<string | null>(null);
@@ -109,23 +113,18 @@ export default function Navbar() {
   const linkRefs = useRef<HTMLDivElement[]>([]);
   const [barStyle, setBarStyle] = useState({ left: 0, width: 0 });
 
-  // Mobile menu state
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [mobileActiveSubmenu, setMobileActiveSubmenu] = useState<string | null>(null);
 
   const megaOpen = isHoveringLink || isHoveringCard;
 
-  // Update moving bar position
   useEffect(() => {
     const target = hoverLink || activeLink;
     const index = links.indexOf(target);
     const el = linkRefs.current[index];
-    if (el) {
-      setBarStyle({ left: el.offsetLeft, width: el.offsetWidth });
-    }
+    if (el) setBarStyle({ left: el.offsetLeft, width: el.offsetWidth });
   }, [activeLink, hoverLink]);
 
-  // Mobile submenu toggle
   const toggleMobileSubmenu = (link: string) => {
     setMobileActiveSubmenu((prev) => (prev === link ? null : link));
   };
@@ -152,8 +151,6 @@ export default function Navbar() {
               {link}
             </div>
           ))}
-
-          {/* Moving border */}
           <span
             className="absolute bottom-0 h-0.5 bg-black rounded-full transition-all duration-300"
             style={{ left: barStyle.left, width: barStyle.width }}
@@ -167,10 +164,7 @@ export default function Navbar() {
               className="font-extrabold italic text-2xl md:text-3xl text-black cursor-pointer select-none"
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              whileHover={{
-                scale: 1.1,
-                rotate: [0, 5, -5, 0],
-              }}
+              whileHover={{ scale: 1.1, rotate: [0, 5, -5, 0] }}
               transition={{ type: "tween", duration: 0.5 }}
             >
               FashionFy
@@ -180,44 +174,63 @@ export default function Navbar() {
 
         {/* Right Icons */}
         <div className="flex items-center space-x-4 text-black cursor-pointer">
-          {/* Mobile Menu Button */}
           <div className="md:hidden" onClick={() => setIsMobileMenuOpen(true)}>
             <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" d="M3 6h18M3 12h18M3 18h18" />
             </svg>
           </div>
 
-          {/* Search Icon */}
           <div className="hidden md:block p-1 rounded-full">
             <Search className="w-5 h-5" />
           </div>
 
-          {/* Pakistan Flag */}
           <div className="hidden md:block w-7 h-7 relative rounded-full overflow-hidden cursor-pointer">
             <Image src="/Pakistan.webp" alt="Pakistan" fill className="object-cover" />
           </div>
 
-          {/* User Icon */}
-          <Link href="/login">
-            <div className="hidden md:block p-1 rounded-full cursor-pointer hover:bg-gray-100 transition">
-              <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" focusable="false" role="presentation">
-                <g fill="none" fillRule="evenodd">
-                  <path d="M12 2a5 5 0 1 1 0 10 5 5 0 0 1 0-10Zm0 1.429a3.571 3.571 0 1 0 0 7.142 3.571 3.571 0 0 0 0-7.142Z" fill="currentColor" />
-                  <path d="M3 18.25c0-2.486 4.542-4 9.028-4 4.486 0 8.972 1.514 8.972 4v3H3v-3Z" stroke="currentColor" strokeWidth="1.5" />
-                  <circle stroke="currentColor" strokeWidth="1.5" cx="12" cy="7" r="4.25" />
-                </g>
-              </svg>
-            </div>
-          </Link>
+         {/* User Icon / Profile Pic */}
+<Link href={user ? "/profile" : "/login"}>
+  <div className="hidden md:block w-8 h-8 rounded-full overflow-hidden cursor-pointer">
+    {user?.profilePic ? (
+      <Image
+  src={
+    user.profilePic.startsWith("http")
+      ? user.profilePic
+      : `${process.env.NEXT_PUBLIC_API_URL}/${user.profilePic}`
+  }
+  alt={user.name || "User"}
+  width={32}
+  height={32}
+  className="object-cover rounded-full"
+/>
 
-          {/* Wishlist */}
+    ) : (
+      <svg
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+        focusable="false"
+        role="presentation"
+        className="text-black"
+      >
+        <g fill="none" fillRule="evenodd">
+          <path d="M12 2a5 5 0 1 1 0 10 5 5 0 0 1 0-10Zm0 1.429a3.571 3.571 0 1 0 0 7.142 3.571 3.571 0 0 0 0-7.142Z" fill="currentColor" />
+          <path d="M3 18.25c0-2.486 4.542-4 9.028-4 4.486 0 8.972 1.514 8.972 4v3H3v-3Z" stroke="currentColor" strokeWidth="1.5" />
+          <circle stroke="currentColor" strokeWidth="1.5" cx="12" cy="7" r="4.25" />
+        </g>
+      </svg>
+    )}
+  </div>
+</Link>
+
+
           <Link href="/wishlist">
             <div className="hidden md:block p-1 rounded-full cursor-pointer hover:bg-gray-100 transition">
               <Heart className="w-5 h-5" />
             </div>
           </Link>
 
-          {/* Cart */}
           <div className="p-1 rounded-full cursor-pointer relative" onClick={() => setIsCartOpen(true)}>
             <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none">
               <g fill="none" fillRule="evenodd">
@@ -232,10 +245,7 @@ export default function Navbar() {
           </div>
         </div>
 
-        {/* Cart Drawer */}
         <ShoppingCartSidebar isCartOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
-
-        {/* Optional Overlay */}
         {isCartOpen && <div className="fixed inset-0 bg-black/30 z-40" onClick={() => setIsCartOpen(false)} />}
       </div>
 

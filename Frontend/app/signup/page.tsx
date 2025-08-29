@@ -204,9 +204,14 @@ const SignUpPage: React.FC = () => {
 
           {/* Submit Button */}
           <div className="mb-6">
-            <button type="submit" className="w-full px-4 py-2 gradient-button text-white font-bold rounded-md hover:from-blue-600 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
-              Sign Up
-            </button>
+            <button
+  type="submit"
+  className="w-full px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white font-bold rounded-md 
+             hover:from-blue-600 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+>
+  Sign Up
+</button>
+
           </div>
 
           {/* Login Link */}
